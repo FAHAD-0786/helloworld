@@ -7,22 +7,22 @@ from routers import auth, aptitude, coding, communication, dashboard, assistant,
 
 app = FastAPI(title="PlacementPro API", version="1.0.0")
 
-FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
+# Your Netlify frontend URL
+FRONTEND_URL = "https://charming-centaur-2aa657.netlify.app"
 
+# CORS FIX
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         FRONTEND_URL,
-        "http://localhost:5173",
-        "http://localhost:3000",
-        "https://*.vercel.app",
-        "https://*.netlify.app",
+        "http://localhost:5173"
     ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+# Routers
 app.include_router(auth.router)
 app.include_router(aptitude.router)
 app.include_router(coding.router)
@@ -32,7 +32,7 @@ app.include_router(assistant.router)
 app.include_router(profile.router)
 app.include_router(company.router)
 
-
+# Startup event
 @app.on_event("startup")
 async def startup():
     print("Starting PlacementPro...")
@@ -40,11 +40,13 @@ async def startup():
     seed_database()
     print("Ready!")
 
-
+# Test routes
 @app.get("/")
 async def root():
-    return {"message": "PlacementPro API running", "docs": "/docs"}
-
+    return {
+        "message": "PlacementPro API running",
+        "docs": "/docs"
+    }
 
 @app.get("/health")
 async def health():
