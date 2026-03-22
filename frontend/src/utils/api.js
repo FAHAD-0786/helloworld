@@ -1,8 +1,8 @@
 import axios from 'axios'
 
-const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'https://placementpro-hpzg.onrender.com/',
-})
+const BASE = (import.meta.env.VITE_API_URL || 'https://placementpro-hpzg.onrender.com').replace(/\/$/, '')
+
+const api = axios.create({ baseURL: BASE })
 
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('pp_token')
